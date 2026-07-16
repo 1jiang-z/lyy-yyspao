@@ -1,0 +1,2196 @@
+/**
+ * 留言墙 - 黑白暗黑风格
+ * 书桌 + 黑无常锁链 + 黑色窗帘 + 猫咪便签
+ */
+
+/* ===== 模态框容器 ===== */
+#message-wall-modal .mw-modal-content {
+    max-width: 540px;
+    width: 94%;
+    max-height: 88vh;
+    padding: 0 !important;
+    overflow: hidden;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* ===== 房间背景（黑白） ===== */
+.mw-room {
+    position: relative;
+    width: 100%;
+    min-height: 560px;
+    max-height: 85vh;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1f1f1f 50%, #181818 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+}
+
+/* 墙壁纹理 - 淡淡的纹理 */
+.mw-room::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 50px,
+        rgba(255,255,255,0.015) 50px,
+        rgba(255,255,255,0.015) 51px
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 踢脚线 */
+.mw-room::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 26px;
+    background: linear-gradient(180deg, #0d0d0d 0%, #000 100%);
+    box-shadow: 0 -1px 2px rgba(255,255,255,0.05);
+    z-index: 0;
+}
+
+/* ===== 标题 ===== */
+.mw-title {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 600;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* ===== 设置按钮 & 关闭按钮 ===== */
+.mw-settings-btn,
+.mw-close-btn {
+    position: absolute;
+    top: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #888;
+    font-size: 13px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.mw-settings-btn {
+    right: 52px;
+}
+
+.mw-close-btn {
+    right: 12px;
+}
+
+.mw-settings-btn:hover,
+.mw-close-btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: #ddd;
+    transform: scale(1.08);
+}
+
+/* ===== 深灰偏蓝窗帘 ===== */
+.mw-curtain {
+    position: absolute;
+    top: 0;
+    width: 55px;
+    height: 100%;
+    z-index: 4;
+    background: linear-gradient(90deg, #2a3040 0%, #353c50 40%, #3d4558 70%, rgba(50,55,70,0) 100%);
+    pointer-events: none;
+}
+
+.mw-curtain-left {
+    left: 0;
+    background: linear-gradient(90deg, #2a3040 0%, #353c50 40%, #3d4558 70%, rgba(50,55,70,0) 100%);
+}
+
+.mw-curtain-right {
+    right: 0;
+    background: linear-gradient(-90deg, #2a3040 0%, #353c50 40%, #3d4558 70%, rgba(50,55,70,0) 100%);
+}
+
+/* 窗帘褶皱 */
+.mw-curtain::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 8px,
+        rgba(255,255,255,0.03) 8px,
+        rgba(255,255,255,0.03) 10px
+    );
+}
+
+/* ===== 窗户（黑白版） ===== */
+.mw-window {
+    position: absolute;
+    top: 50px;
+    right: 70px;
+    width: 130px;
+    height: 150px;
+    z-index: 2;
+}
+
+.mw-window-frame {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 18px);
+    background: #fff;
+    border: 4px solid #333;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* 窗格十字 */
+.mw-window-cross-h,
+.mw-window-cross-v {
+    position: absolute;
+    background: #333;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.mw-window-cross-h {
+    top: 50%;
+    left: 0; right: 0;
+    height: 3px;
+    transform: translateY(-50%);
+}
+
+.mw-window-cross-v {
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 3px;
+    transform: translateX(-50%);
+}
+
+/* 窗台 */
+.mw-window-sill {
+    position: absolute;
+    bottom: 0;
+    left: -6px;
+    right: -6px;
+    height: 18px;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* ===== 窗户外的天空（黑白处理） ===== */
+.mw-window-sky {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transition: filter 1.5s ease, background 1.5s ease;
+    filter: grayscale(100%);
+}
+
+/* 各时间段（黑白版） */
+.mw-window-sky.period-dawn {
+    background: linear-gradient(180deg, #555 0%, #888 40%, #aaa 100%);
+}
+.mw-window-sky.period-sunrise {
+    background: linear-gradient(180deg, #777 0%, #999 50%, #bbb 100%);
+}
+.mw-window-sky.period-morning {
+    background: linear-gradient(180deg, #888 0%, #aaa 60%, #ccc 100%);
+}
+.mw-window-sky.period-noon {
+    background: linear-gradient(180deg, #666 0%, #999 50%, #bbb 100%);
+}
+.mw-window-sky.period-afternoon {
+    background: linear-gradient(180deg, #777 0%, #999 60%, #bbb 100%);
+}
+.mw-window-sky.period-sunset {
+    background: linear-gradient(180deg, #444 0%, #666 40%, #555 100%);
+}
+.mw-window-sky.period-dusk {
+    background: linear-gradient(180deg, #2a2a2a 0%, #3a3a3a 40%, #4a4a4a 100%);
+}
+.mw-window-sky.period-night {
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+}
+
+/* ===== 太阳（黑白） ===== */
+.mw-sun {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0%, #ddd 60%, #aaa 100%);
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+    transition: all 1.5s ease;
+    opacity: 0;
+    filter: grayscale(100%);
+}
+
+.mw-window-sky.period-dawn .mw-sun {
+    top: 60%; left: 20%;
+    opacity: 0.7;
+    width: 24px; height: 24px;
+}
+.mw-window-sky.period-sunrise .mw-sun {
+    top: 35%; left: 30%;
+    opacity: 1;
+}
+.mw-window-sky.period-morning .mw-sun {
+    top: 15%; left: 45%;
+    opacity: 1;
+}
+.mw-window-sky.period-noon .mw-sun {
+    top: 8%; left: 50%;
+    transform: translateX(-50%);
+    opacity: 1;
+    width: 32px; height: 32px;
+}
+.mw-window-sky.period-afternoon .mw-sun {
+    top: 20%; right: 25%;
+    left: auto;
+    opacity: 1;
+}
+.mw-window-sky.period-sunset .mw-sun {
+    top: 55%; right: 15%;
+    left: auto;
+    opacity: 0.8;
+    background: radial-gradient(circle, #eee 0%, #999 60%, #666 100%);
+}
+.mw-window-sky.period-dusk .mw-sun,
+.mw-window-sky.period-night .mw-sun {
+    opacity: 0;
+}
+
+/* ===== 月亮（黑白） ===== */
+.mw-moon {
+    position: absolute;
+    top: 20%;
+    right: 25%;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f0f0f0 0%, #ccc 70%, #999 100%);
+    box-shadow: 0 0 12px rgba(255,255,255,0.3);
+    opacity: 0;
+    transition: all 1.5s ease;
+    filter: grayscale(100%);
+}
+
+.mw-window-sky.period-dusk .mw-moon {
+    top: 30%; right: 20%;
+    opacity: 0.5;
+}
+.mw-window-sky.period-night .mw-moon {
+    top: 15%; right: 30%;
+    opacity: 1;
+}
+
+.mw-moon::after {
+    content: '';
+    position: absolute;
+    top: -2px; right: -3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: inherit;
+    filter: brightness(0.6);
+}
+
+/* ===== 星星 ===== */
+.mw-stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.mw-window-sky.period-dusk .mw-stars {
+    opacity: 0.4;
+}
+.mw-window-sky.period-night .mw-stars {
+    opacity: 1;
+}
+
+.mw-stars::before,
+.mw-stars::after {
+    content: '';
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow:
+        18px 12px 0 #fff,
+        40px 28px 0 #fff,
+        12px 45px 0 #fff,
+        55px 8px 0 #fff,
+        70px 40px 0 #fff,
+        30px 65px 0 #fff,
+        85px 22px 0 #fff,
+        95px 55px 0 #fff,
+        6px 75px 0 #fff,
+        50px 85px 0 #fff;
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+.mw-stars::after {
+    animation-delay: 1.5s;
+    left: 45px;
+    top: 8px;
+    opacity: 0.6;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ===== 云朵（黑白） ===== */
+.mw-cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50px;
+    transition: all 1.5s ease;
+    filter: grayscale(100%);
+}
+
+.mw-cloud-1 {
+    top: 25%;
+    left: -20px;
+    width: 45px;
+    height: 14px;
+    animation: cloudFloat1 25s linear infinite;
+}
+.mw-cloud-1::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: 7px;
+    width: 20px; height: 20px;
+    background: inherit;
+    border-radius: 50%;
+}
+.mw-cloud-1::after {
+    content: '';
+    position: absolute;
+    top: -4px; right: 5px;
+    width: 16px; height: 16px;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.mw-cloud-2 {
+    top: 45%;
+    left: -35px;
+    width: 36px;
+    height: 11px;
+    animation: cloudFloat2 35s linear infinite;
+    animation-delay: -10s;
+}
+.mw-cloud-2::before {
+    content: '';
+    position: absolute;
+    top: -5px; left: 5px;
+    width: 14px; height: 14px;
+    background: inherit;
+    border-radius: 50%;
+}
+
+@keyframes cloudFloat1 {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(170px); }
+}
+
+@keyframes cloudFloat2 {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(180px); }
+}
+
+.mw-window-sky.period-dusk .mw-cloud,
+.mw-window-sky.period-night .mw-cloud {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ===== 远山（黑白） ===== */
+.mw-window-mountain {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 30%;
+    transition: border-color 1.5s ease;
+}
+
+.mw-window-mountain::before,
+.mw-window-mountain::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    border-left: 45px solid transparent;
+    border-right: 45px solid transparent;
+    transition: border-color 1.5s ease;
+}
+
+.mw-window-mountain::before {
+    left: 10%;
+    border-bottom: 40px solid #444;
+}
+.mw-window-mountain::after {
+    right: 5%;
+    border-bottom: 32px solid #333;
+}
+
+.mw-window-sky.period-night + .mw-window-mountain::before,
+.mw-window-sky.period-night + .mw-window-mountain::after {
+    border-bottom-color: #111;
+}
+
+/* ===== 墙上的皮质短上衣 ===== */
+.mw-leather-jacket {
+    position: absolute;
+    top: 35px;
+    left: 75px;
+    z-index: 3;
+    transform: rotate(-3deg);
+}
+
+.mw-jacket-hanger {
+    width: 20px;
+    height: 12px;
+    margin: 0 auto;
+    background: #8b7355;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+}
+.mw-jacket-hanger::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border: 2px solid #8b7355;
+    border-bottom: none;
+    border-radius: 50% 50% 0 0;
+}
+
+.mw-jacket-body {
+    width: 55px;
+    height: 70px;
+    background: linear-gradient(180deg, #2a2020 0%, #1a1414 50%, #0f0a0a 100%);
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
+}
+
+/* 皮衣纹理 */
+.mw-jacket-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,0.02) 3px,
+        rgba(255,255,255,0.02) 4px
+    );
+    border-radius: inherit;
+}
+
+.mw-jacket-collar {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 18px;
+    background: linear-gradient(180deg, #3a2a2a 0%, #2a1a1a 100%);
+    border-radius: 0 0 50% 50%;
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+}
+
+.mw-jacket-zipper {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 45px;
+    background: linear-gradient(180deg, #666 0%, #888 50%, #666 100%);
+}
+.mw-jacket-zipper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 8px;
+    background: #888;
+    border-radius: 1px;
+}
+
+.mw-jacket-pocket {
+    position: absolute;
+    top: 32px;
+    width: 12px;
+    height: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 2px;
+}
+.mw-jacket-pocket-left {
+    left: 8px;
+}
+.mw-jacket-pocket-right {
+    right: 8px;
+}
+
+.mw-jacket-sleeve {
+    position: absolute;
+    top: 12px;
+    width: 12px;
+    height: 40px;
+    background: linear-gradient(180deg, #2a2020 0%, #1a1414 100%);
+    border-radius: 3px;
+}
+.mw-jacket-sleeve-left {
+    left: -8px;
+    transform: rotate(8deg);
+    transform-origin: top right;
+}
+.mw-jacket-sleeve-right {
+    right: -8px;
+    transform: rotate(-8deg);
+    transform-origin: top left;
+}
+
+/* ===== 暖光灯 ===== */
+.mw-warm-lamp {
+    position: absolute;
+    top: 0;
+    right: 40px;
+    z-index: 3;
+}
+
+.mw-lamp-cord {
+    width: 2px;
+    height: 45px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #555 0%, #333 100%);
+}
+
+.mw-lamp-shade {
+    width: 50px;
+    height: 35px;
+    background: linear-gradient(180deg, #c9a86c 0%, #a08050 50%, #806040 100%);
+    border-radius: 50% 50% 10px 10px / 30% 30% 10px 10px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+.mw-lamp-shade::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 5px;
+    background: #888;
+    border-radius: 2px;
+}
+
+.mw-lamp-bulb {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, #fff5d6 0%, #ffe082 60%, #ffc107 100%);
+    border-radius: 50%;
+    opacity: 0.3;
+    transition: opacity 1s ease;
+}
+
+/* 灯光效果 */
+.mw-lamp-light {
+    position: absolute;
+    top: 75px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 150px;
+    background: radial-gradient(ellipse at top, rgba(255,200,100,0.15) 0%, rgba(255,180,80,0.05) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 晚上灯亮 */
+.mw-room.night .mw-lamp-bulb {
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(255,200,100,0.8), 0 0 30px rgba(255,180,80,0.5);
+}
+.mw-room.night .mw-lamp-light {
+    opacity: 1;
+}
+
+/* ===== 书桌 ===== */
+.mw-desk {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    height: 380px;
+    z-index: 5;
+}
+
+/* 桌面 */
+.mw-desk::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    right: -10px;
+    height: 18px;
+    background: linear-gradient(180deg, #2d2d2d 0%, #1f1f1f 50%, #181818 100%);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 -1px 0 rgba(255,255,255,0.08) inset, 0 3px 8px rgba(0,0,0,0.5);
+}
+
+/* 桌腿（左右） */
+.mw-desk::after {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+    border-radius: 0 0 4px 4px;
+    box-shadow: inset 2px 0 4px rgba(0,0,0,0.3), inset -2px 0 4px rgba(0,0,0,0.3);
+}
+
+/* 桌面纹理 */
+.mw-desk > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* ===== 黑无常锁链（精美铁链条）===== */
+.mw-chain {
+    position: absolute;
+    top: -5px;
+    left: 18px;
+    z-index: 5;
+    transform: rotate(-12deg);
+    filter: drop-shadow(3px 5px 10px rgba(0,0,0,0.7));
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+
+.mw-chain:hover {
+    filter: drop-shadow(3px 5px 15px rgba(0,0,0,0.8)) brightness(1.1);
+}
+
+/* 锁链基础：每一环都是相扣的椭圆 */
+.mw-chain-link {
+    width: 24px;
+    height: 36px;
+    position: relative;
+    margin-top: -24px; /* 重叠以模拟相扣 */
+    transition: all 1s ease;
+}
+
+.mw-chain-link:first-of-type {
+    margin-top: 0;
+}
+
+/* 链条内环（增加立体感） */
+.mw-chain-link .chain-inner {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    background: transparent;
+}
+
+/* 偶数环和奇数环交替偏移，模拟相扣效果 */
+.mw-chain-link:nth-child(odd) {
+    margin-left: 0;
+}
+.mw-chain-link:nth-child(even) {
+    margin-left: 1px;
+    transform: translateX(2px);
+}
+
+/* 银白色（白天） */
+.mw-chain:not(.night) .mw-chain-link {
+    background: linear-gradient(
+        90deg,
+        #6a6a6a 0%,
+        #9a9a9a 15%,
+        #d0d0d0 30%,
+        #f0f0f0 45%,
+        #e8e8e8 50%,
+        #c0c0c0 60%,
+        #8a8a8a 80%,
+        #5a5a5a 100%
+    );
+    border-radius: 50%;
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.8),
+        inset 0 -2px 4px rgba(0,0,0,0.3),
+        inset 2px 0 3px rgba(255,255,255,0.4),
+        inset -2px 0 3px rgba(0,0,0,0.2),
+        0 2px 6px rgba(0,0,0,0.3);
+}
+
+.mw-chain:not(.night) .mw-chain-link .chain-inner {
+    background: linear-gradient(
+        180deg,
+        #2a2a2a 0%,
+        #1a1a1a 50%,
+        #2a2a2a 100%
+    );
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.8),
+        inset 0 -1px 2px rgba(255,255,255,0.1);
+}
+
+/* 黑色（夜晚） */
+.mw-chain.night .mw-chain-link {
+    background: linear-gradient(
+        90deg,
+        #1a1a1a 0%,
+        #2a2a2a 15%,
+        #3a3a3a 30%,
+        #4a4a4a 45%,
+        #424242 50%,
+        #333 60%,
+        #222 80%,
+        #111 100%
+    );
+    border-radius: 50%;
+    box-shadow:
+        inset 0 2px 4px rgba(255,255,255,0.12),
+        inset 0 -2px 4px rgba(0,0,0,0.6),
+        inset 2px 0 3px rgba(255,255,255,0.05),
+        inset -2px 0 3px rgba(0,0,0,0.4),
+        0 2px 6px rgba(0,0,0,0.5);
+}
+
+.mw-chain.night .mw-chain-link .chain-inner {
+    background: linear-gradient(
+        180deg,
+        #0a0a0a 0%,
+        #050505 50%,
+        #0a0a0a 100%
+    );
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.9),
+        inset 0 -1px 2px rgba(255,255,255,0.03);
+}
+
+/* 锁链末端钩子 */
+.mw-chain-hook {
+    width: 20px;
+    height: 30px;
+    margin-top: -20px;
+    margin-left: 3px;
+    transition: all 1s ease;
+    position: relative;
+    border-radius: 0 60% 60% 0 / 0 50% 50% 0;
+}
+
+.mw-chain:not(.night) .mw-chain-hook {
+    background: linear-gradient(
+        90deg,
+        #6a6a6a 0%,
+        #9a9a9a 20%,
+        #d0d0d0 40%,
+        #f0f0f0 55%,
+        #c0c0c0 75%,
+        #7a7a7a 100%
+    );
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,0.7),
+        inset 0 -2px 3px rgba(0,0,0,0.3),
+        0 2px 5px rgba(0,0,0,0.3);
+}
+
+.mw-chain.night .mw-chain-hook {
+    background: linear-gradient(
+        90deg,
+        #1a1a1a 0%,
+        #2a2a2a 20%,
+        #3a3a3a 40%,
+        #454545 55%,
+        #2a2a2a 75%,
+        #111 100%
+    );
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,0.1),
+        inset 0 -2px 3px rgba(0,0,0,0.5),
+        0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* ===== 窗台上的绿萝 ===== */
+.mw-pothos {
+    position: absolute;
+    bottom: 5px;
+    left: 15px;
+    z-index: 3;
+}
+
+.mw-pothos-pot {
+    width: 28px;
+    height: 22px;
+    position: relative;
+}
+
+.mw-pothos-pot-rim {
+    width: 32px;
+    height: 5px;
+    margin-left: -2px;
+    background: linear-gradient(180deg, #c87941 0%, #a85d2e 100%);
+    border-radius: 2px 2px 0 0;
+}
+
+.mw-pothos-pot::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    width: 24px;
+    height: 17px;
+    background: linear-gradient(180deg, #d4854a 0%, #b86b3a 50%, #9a5528 100%);
+    border-radius: 0 0 3px 3px;
+}
+
+.mw-pothos-soil {
+    position: absolute;
+    top: 5px;
+    left: 4px;
+    width: 20px;
+    height: 5px;
+    background: #3d2817;
+    border-radius: 0 0 2px 2px;
+    z-index: 2;
+}
+
+.mw-pothos-leaves {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 40px;
+}
+
+.mw-pothos-leaf {
+    position: absolute;
+    width: 14px;
+    height: 20px;
+    background: linear-gradient(135deg, #4a7c59 0%, #2d5a3d 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+.mw-pothos-leaf::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 14px;
+    background: rgba(0,0,0,0.15);
+}
+
+.mw-pothos-leaf.l1 {
+    bottom: 0;
+    left: 18px;
+    transform: rotate(0deg);
+    z-index: 3;
+}
+.mw-pothos-leaf.l2 {
+    bottom: 5px;
+    left: 8px;
+    transform: rotate(-25deg);
+    z-index: 2;
+}
+.mw-pothos-leaf.l3 {
+    bottom: 5px;
+    right: 8px;
+    transform: rotate(25deg);
+    z-index: 2;
+}
+.mw-pothos-leaf.l4 {
+    bottom: 12px;
+    left: 3px;
+    transform: rotate(-45deg);
+    z-index: 1;
+    width: 12px;
+    height: 16px;
+}
+.mw-pothos-leaf.l5 {
+    bottom: 14px;
+    right: 5px;
+    transform: rotate(40deg);
+    z-index: 1;
+    width: 11px;
+    height: 15px;
+}
+
+.mw-pothos-vine {
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(180deg, #3d6b4a 0%, #2d5a3d 100%);
+    border-radius: 2px;
+}
+.mw-pothos-vine.v1 {
+    top: 15px;
+    left: 10px;
+    height: 25px;
+    transform: rotate(-30deg);
+    transform-origin: top;
+}
+.mw-pothos-vine.v2 {
+    top: 18px;
+    right: 12px;
+    height: 20px;
+    transform: rotate(25deg);
+    transform-origin: top;
+}
+
+/* ===== 锁链上的铁环装饰 ===== */
+.mw-chain-ring {
+    width: 20px;
+    height: 20px;
+    border: 3px solid;
+    border-radius: 50%;
+    position: relative;
+    margin: 0 auto 8px;
+    transition: all 1s ease;
+}
+
+.mw-chain:not(.night) .mw-chain-ring {
+    border-color: #b0b0b0;
+    background: linear-gradient(135deg, #f5f5f5 0%, #d8d8d8 20%, #a8a8a8 50%, #c8c8c8 75%, #e8e8e8 100%);
+    box-shadow:
+        inset 1px 1px 3px rgba(255,255,255,0.7),
+        inset -1px -1px 3px rgba(0,0,0,0.2),
+        0 0 6px rgba(180,180,180,0.4);
+}
+
+.mw-chain.night .mw-chain-ring {
+    border-color: #1a1a1a;
+    background: linear-gradient(135deg, #444 0%, #333 20%, #1a1a1a 50%, #222 75%, #3a3a3a 100%);
+    box-shadow:
+        inset 1px 1px 3px rgba(255,255,255,0.08),
+        inset -1px -1px 3px rgba(0,0,0,0.4),
+        0 0 6px rgba(0,0,0,0.6);
+}
+
+/* ===== 透蓝色玻璃杯 ===== */
+.mw-blue-glass {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    z-index: 4;
+    transform: rotate(2deg);
+}
+
+.mw-glass-body {
+    width: 24px;
+    height: 32px;
+    background: linear-gradient(135deg, rgba(100,180,220,0.3) 0%, rgba(80,160,210,0.5) 50%, rgba(60,140,190,0.3) 100%);
+    border: 2px solid rgba(100,180,220,0.6);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    position: relative;
+    box-shadow: 
+        inset 3px 3px 6px rgba(255,255,255,0.3),
+        2px 3px 6px rgba(0,0,0,0.3);
+}
+
+.mw-glass-water {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+    height: 18px;
+    background: linear-gradient(180deg, rgba(100,180,220,0.5) 0%, rgba(60,140,190,0.7) 100%);
+    border-radius: 0 0 6px 6px;
+}
+.mw-glass-water::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+}
+
+.mw-glass-shine {
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 3px;
+    height: 15px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%);
+    border-radius: 2px;
+}
+
+.mw-glass-base {
+    width: 18px;
+    height: 4px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, rgba(100,180,220,0.5) 0%, rgba(60,140,190,0.6) 100%);
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ===== 白色符纸 ===== */
+.mw-talisman {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    z-index: 4;
+}
+
+.mw-talisman-paper {
+    width: 30px;
+    height: 42px;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 50%, #e8e8e8 100%);
+    position: relative;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
+}
+.mw-talisman-paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 4px,
+        rgba(0,0,0,0.02) 4px,
+        rgba(0,0,0,0.02) 5px
+    );
+}
+
+/* 黑色符文纹路 */
+.mw-talisman-pattern {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 30px;
+}
+.mw-talisman-pattern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    background: #222;
+}
+.mw-talisman-pattern::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 2px;
+    right: 2px;
+    height: 14px;
+    border: 2px solid #222;
+    border-left: none;
+    border-right: none;
+    border-radius: 50%;
+}
+
+/* ===== 铃木GSX50R车钥匙 ===== */
+.mw-moto-key {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    z-index: 4;
+    transform: rotate(-15deg);
+    display: flex;
+    align-items: center;
+}
+
+.mw-key-fob {
+    width: 28px;
+    height: 40px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #000 100%);
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+}
+
+.mw-key-logo {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 5px;
+    font-weight: bold;
+    color: #c0c0c0;
+    letter-spacing: 0.5px;
+    display: flex;
+    gap: 1px;
+}
+
+.mw-key-buttons {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+}
+
+.mw-key-btn {
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+    border: 1px solid #555;
+    position: relative;
+}
+.mw-key-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3px;
+    height: 3px;
+    border: 1px solid #888;
+    border-radius: 50%;
+}
+.mw-key-btn-lock::after {
+    border-color: #888;
+}
+.mw-key-btn-unlock::after {
+    border-color: #6aa84f;
+}
+
+.mw-key-blade {
+    width: 18px;
+    height: 6px;
+    background: linear-gradient(180deg, #d0d0d0 0%, #a0a0a0 50%, #c0c0c0 100%);
+    margin-left: -2px;
+    position: relative;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.mw-key-teeth {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 4px;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        transparent 0%, transparent 15%, 
+        #a0a0a0 15%, #a0a0a0 25%, 
+        transparent 25%, transparent 40%, 
+        #a0a0a0 40%, #a0a0a0 55%, 
+        transparent 55%, transparent 70%, 
+        #a0a0a0 70%, #a0a0a0 80%, 
+        transparent 80%);
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+}
+
+.mw-key-ring {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid #c0c0c0;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ===== 拼字卡风格便签区域 ===== */
+.mw-sticky-area {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    overflow: hidden;
+    z-index: 3;
+}
+
+/* ===== 拼字卡风格便签列表（堆叠模式）===== */
+.mw-sticky-list {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* 堆叠模式下的便签 */
+.mw-sticky-note.mw-sticky-stacked {
+    position: absolute;
+    width: 100px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mw-sticky-note.mw-sticky-stacked:hover {
+    z-index: 30 !important;
+    opacity: 1 !important;
+    filter: brightness(1.05);
+}
+
+/* 还有更多便签提示 */
+.mw-sticky-more {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    z-index: 1;
+    pointer-events: none;
+}
+.mw-sticky-more i {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 3px;
+    opacity: 0.6;
+}
+.mw-sticky-more small {
+    display: block;
+    font-size: 9px;
+    opacity: 0.6;
+    margin-top: 2px;
+}
+
+/* ===== 拼字卡风格便签 ===== */
+.mw-sticky-note {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    animation: cardDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) rotate(-5deg) scale(0.8);
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.mw-sticky-note:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+    z-index: 10;
+}
+
+/* 便签卡主体 - 拼字卡风格 */
+.mw-sticky-note-paper {
+    background: linear-gradient(145deg, #faf8f5 0%, #f5f2ed 50%, #ebe7e0 100%);
+    border-radius: 8px;
+    padding: 18px 10px 22px;
+    position: relative;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.35),
+        0 1px 3px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -1px 0 rgba(0,0,0,0.05);
+    min-height: 75px;
+    border: 1px solid rgba(180,165,140,0.3);
+}
+
+/* 卡片顶部装饰条 */
+.mw-sticky-note-paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        #c9a86c 0%, 
+        #e8d5a3 20%, 
+        #c9a86c 40%, 
+        #e8d5a3 60%, 
+        #c9a86c 80%, 
+        #e8d5a3 100%);
+    border-radius: 8px 8px 0 0;
+}
+
+/* 卡片底部装饰 */
+.mw-sticky-note-paper::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    right: 8px;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(180,165,140,0.3) 20%, 
+        rgba(180,165,140,0.3) 80%, 
+        transparent 100%);
+}
+
+/* 拼字卡样式 - 字卡库来源（深灰偏蓝 + 鎏金色） */
+.mw-sticky-note.source-wordcard .mw-sticky-note-paper {
+    background: linear-gradient(145deg, #3a4558 0%, #323d4f 50%, #2a3342 100%);
+    border-color: rgba(90, 105, 130, 0.5);
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.45),
+        0 1px 3px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 0 0 1px rgba(201, 168, 108, 0.2),
+        0 0 12px rgba(201, 168, 108, 0.1);
+}
+
+.mw-sticky-note.source-wordcard .mw-sticky-note-paper::before {
+    background: linear-gradient(90deg, 
+        #b8956a 0%, 
+        #d4bc8a 25%, 
+        #e8d5a3 50%, 
+        #d4bc8a 75%, 
+        #b8956a 100%);
+    height: 5px;
+}
+
+/* 拼字卡内容 - 鎏金色 */
+.mw-sticky-note.source-wordcard .mw-sticky-content {
+    color: #e8d5a3;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* 拼字卡时间 - 鎏金色调暗 */
+.mw-sticky-note.source-wordcard .mw-sticky-time {
+    color: #a89880;
+}
+
+/* 拼字卡数量标记 - 鎏金色 */
+.mw-sticky-note.source-wordcard .mw-card-count {
+    color: #d4bc8a;
+}
+
+/* 拼字卡来源标签 - 鎏金色 */
+.mw-sticky-note.source-wordcard .mw-card-source {
+    color: #d4bc8a;
+    background: rgba(201, 168, 108, 0.15);
+}
+
+/* 拼字卡已修改标签 */
+.mw-sticky-note.source-wordcard .mw-sticky-edited {
+    color: #d4bc8a;
+    background: rgba(201, 168, 108, 0.15);
+}
+
+/* 已修改的便签（深灰偏蓝 + 鎏金色） */
+.mw-sticky-note.is-edited .mw-sticky-note-paper {
+    background: linear-gradient(145deg, #3a4558 0%, #323d4f 50%, #2a3342 100%);
+    border-color: rgba(90, 105, 130, 0.5);
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.45),
+        0 1px 3px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 0 0 1px rgba(201, 168, 108, 0.2),
+        0 0 12px rgba(201, 168, 108, 0.1);
+}
+
+.mw-sticky-note.is-edited .mw-sticky-note-paper::before {
+    background: linear-gradient(90deg, 
+        #b8956a 0%, 
+        #d4bc8a 25%, 
+        #e8d5a3 50%, 
+        #d4bc8a 75%, 
+        #b8956a 100%);
+    height: 5px;
+}
+
+/* 已修改便签内容 - 鎏金色 */
+.mw-sticky-note.is-edited .mw-sticky-content {
+    color: #e8d5a3;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* 已修改便签时间 */
+.mw-sticky-note.is-edited .mw-sticky-time {
+    color: #a89880;
+}
+
+/* 已修改标签 */
+.mw-sticky-note.is-edited .mw-sticky-edited {
+    color: #d4bc8a;
+    background: rgba(201, 168, 108, 0.15);
+}
+
+/* 便签内容 */
+.mw-sticky-content {
+    position: relative;
+    z-index: 1;
+    font-size: 12px;
+    line-height: 17px;
+    color: #4a3f35;
+    font-family: 'Kaiti', 'STKaiti', '楷体', 'Microsoft YaHei', sans-serif;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: center;
+    padding: 2px 2px 0;
+}
+
+/* 拼字卡内容样式 - 多行（浅色便签用） */
+.mw-sticky-note.source-original:not(.is-edited) .mw-sticky-content {
+    font-size: 11.5px;
+    line-height: 16px;
+    color: #3d3429;
+    letter-spacing: 0.3px;
+}
+
+/* 便签时间 */
+.mw-sticky-time {
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+    font-size: 9px;
+    color: #a89880;
+    font-style: normal;
+    z-index: 1;
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+
+/* 拼字卡数量标记 */
+.mw-card-count {
+    position: absolute;
+    bottom: 5px;
+    left: 8px;
+    font-size: 9px;
+    color: #b8956a;
+    z-index: 1;
+    font-family: 'Microsoft YaHei', sans-serif;
+    font-weight: 500;
+}
+
+/* 旋转角度（减小旋转幅度，更像整齐的卡片） */
+.mw-sticky-note.rot-1 { transform: rotate(-1.5deg); }
+.mw-sticky-note.rot-2 { transform: rotate(1deg); }
+.mw-sticky-note.rot-3 { transform: rotate(-0.8deg); }
+.mw-sticky-note.rot-4 { transform: rotate(1.8deg); }
+.mw-sticky-note.rot-5 { transform: rotate(-2deg); }
+
+/* 未读标记 */
+.mw-sticky-note.mw-unread::after {
+    content: 'NEW';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #c9a86c 0%, #a8884a 100%);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 8px;
+    transform: rotate(10deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 5;
+    animation: newPulse 1.5s ease-in-out infinite;
+    font-family: 'Microsoft YaHei', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+@keyframes newPulse {
+    0%, 100% { transform: rotate(10deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.1); }
+}
+
+/* 删除按钮 */
+.mw-sticky-del-btn {
+    position: absolute;
+    top: 6px;
+    right: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(180,165,140,0.15);
+    color: #b8a890;
+    font-size: 9px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+}
+
+.mw-sticky-note:hover .mw-sticky-del-btn {
+    opacity: 1;
+}
+
+.mw-sticky-del-btn:hover {
+    background: rgba(200,80,80,0.2) !important;
+    color: #c0392b !important;
+}
+
+/* 已修改标签 */
+.mw-sticky-edited {
+    position: absolute;
+    top: 22px;
+    left: 8px;
+    font-size: 9px;
+    color: #a89880;
+    background: rgba(180,165,140,0.12);
+    padding: 1px 5px;
+    border-radius: 4px;
+    z-index: 3;
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+
+/* 拼字卡来源标签 */
+.mw-card-source {
+    position: absolute;
+    top: 22px;
+    right: 8px;
+    font-size: 8.5px;
+    color: #b8956a;
+    background: rgba(201,168,108,0.12);
+    padding: 1px 5px;
+    border-radius: 4px;
+    z-index: 3;
+    font-family: 'Microsoft YaHei', sans-serif;
+    font-weight: 500;
+}
+
+.mw-card-source i {
+    margin-right: 2px;
+    font-size: 8px;
+}
+
+/* ===== 标题编辑 ===== */
+.mw-title {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mw-title:hover {
+    color: #ddd;
+}
+
+.mw-title-edit-icon {
+    font-size: 11px;
+    opacity: 0;
+    margin-left: 6px;
+    transition: opacity 0.2s;
+}
+
+.mw-title:hover .mw-title-edit-icon {
+    opacity: 0.6;
+}
+
+.mw-title-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ddd;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    text-align: center;
+    width: 180px;
+}
+
+/* ===== 空状态 ===== */
+.mw-empty {
+    width: 100%;
+    text-align: center;
+    padding: 50px 20px;
+    color: #888;
+}
+
+.mw-empty i {
+    font-size: 40px;
+    color: #444;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.mw-empty p {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: #aaa;
+}
+
+.mw-empty span {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* ===== 历史记录标签切换 ===== */
+.mw-history-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--secondary-bg);
+}
+
+.mw-history-tab {
+    flex: 1;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-family: inherit;
+}
+.mw-history-tab:hover {
+    color: var(--text-secondary);
+}
+.mw-history-tab.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+    font-weight: 500;
+}
+.mw-history-tab i {
+    margin-right: 6px;
+    font-size: 12px;
+}
+
+/* ===== 天气变化记录 ===== */
+.mw-weather-item {
+    text-align: center;
+}
+.mw-weather-change {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+.mw-weather-from {
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    background: var(--secondary-bg);
+    border-radius: 20px;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+.mw-weather-arrow {
+    color: var(--accent-color);
+    font-size: 14px;
+}
+.mw-weather-to {
+    color: var(--accent-color);
+    padding: 4px 12px;
+    background: rgba(var(--accent-color-rgb, 197, 164, 126), 0.1);
+    border-radius: 20px;
+}
+.mw-weather-desc {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+}
+
+/* 梦角修改的天气 */
+.mw-weather-item.is-modified {
+    border-color: rgba(197, 164, 126, 0.3);
+    background: rgba(var(--accent-color-rgb, 197, 164, 126), 0.03);
+}
+.mw-weather-modified {
+    font-size: 10px;
+    color: var(--accent-color);
+    background: rgba(var(--accent-color-rgb, 197, 164, 126), 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+.mw-weather-modified i {
+    margin-right: 3px;
+}
+
+/* 自然变化的天气 */
+.mw-weather-item.is-natural {
+    border-color: var(--border-color);
+}
+.mw-weather-natural {
+    font-size: 10px;
+    color: #6aa84f;
+    background: rgba(106, 168, 79, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+.mw-weather-natural i {
+    margin-right: 3px;
+}
+
+/* ===== 天气效果 ===== */
+/* 雨天 */
+.mw-window.weather-rainy .mw-rain {
+    display: block;
+}
+.mw-rain {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+.mw-rain-drop {
+    position: absolute;
+    width: 1px;
+    height: 12px;
+    background: linear-gradient(180deg, transparent, rgba(150,180,200,0.6));
+    animation: rainFall 0.8s linear infinite;
+}
+@keyframes rainFall {
+    0% { transform: translateY(-20px); }
+    100% { transform: translateY(200px); }
+}
+
+/* 雪天 */
+.mw-window.weather-snowy .mw-snow {
+    display: block;
+}
+.mw-snow {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+.mw-snow-flake {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    animation: snowFall 3s linear infinite;
+    box-shadow: 0 0 4px rgba(255,255,255,0.8);
+}
+@keyframes snowFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(200px) rotate(360deg); opacity: 0; }
+}
+
+/* 雷雨天 */
+.mw-window.weather-thunder .mw-thunder {
+    display: block;
+}
+.mw-thunder {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 4;
+    animation: thunderFlash 4s ease-in-out infinite;
+}
+@keyframes thunderFlash {
+    0%, 90%, 100% { background: transparent; }
+    92%, 94% { background: rgba(255,255,255,0.3); }
+    93% { background: rgba(255,255,255,0.1); }
+}
+
+/* 阴天 */
+.mw-window.weather-cloudy .mw-cloud {
+    opacity: 0.9 !important;
+}
+.mw-window.weather-cloudy .mw-sun {
+    opacity: 0.3 !important;
+}
+
+/* 晴天 - 云少 */
+.mw-window.weather-sunny .mw-cloud {
+    opacity: 0.3;
+}
+
+/* ===== 四季景色变化 ===== */
+/* 远山颜色随季节变化 */
+/* 春天 - 嫩绿 */
+.mw-room.season-spring .mw-window-mountain::before {
+    border-bottom-color: #5a7a5a;
+}
+.mw-room.season-spring .mw-window-mountain::after {
+    border-bottom-color: #4a6a4a;
+}
+
+/* 夏天 - 深绿 */
+.mw-room.season-summer .mw-window-mountain::before {
+    border-bottom-color: #3a5a3a;
+}
+.mw-room.season-summer .mw-window-mountain::after {
+    border-bottom-color: #2a4a2a;
+}
+
+/* 秋天 - 金黄/橙红 */
+.mw-room.season-autumn .mw-window-mountain::before {
+    border-bottom-color: #8a6a3a;
+}
+.mw-room.season-autumn .mw-window-mountain::after {
+    border-bottom-color: #7a5a2a;
+}
+
+/* 冬天 - 灰白/积雪 */
+.mw-room.season-winter .mw-window-mountain::before {
+    border-bottom-color: #6a6a6a;
+}
+.mw-room.season-winter .mw-window-mountain::after {
+    border-bottom-color: #5a5a5a;
+}
+.mw-room.season-winter .mw-window-mountain::before {
+    border-bottom-color: #7a7a7a;
+}
+/* 雪山顶 */
+.mw-room.season-winter .mw-window-mountain::after {
+    border-bottom-color: #8a8a8a;
+}
+
+/* ===== 历史便签列表 ===== */
+.mw-history-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-tertiary);
+}
+.mw-history-empty i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+    opacity: 0.4;
+}
+.mw-history-empty p {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 8px 0;
+    color: var(--text-secondary);
+}
+.mw-history-empty span {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.mw-history-item {
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s;
+}
+.mw-history-item:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.mw-history-item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.mw-history-index {
+    font-size: 11px;
+    color: var(--accent-color);
+    font-weight: 600;
+    background: rgba(var(--accent-color-rgb, 197, 164, 126), 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.mw-history-date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    flex: 1;
+}
+
+.mw-history-edited {
+    font-size: 10px;
+    color: #e6a23c;
+    background: rgba(230, 162, 60, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.mw-history-del-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mw-history-del-btn:hover {
+    background: rgba(255, 77, 79, 0.1);
+    color: #ff4d4f;
+}
+
+.mw-history-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    font-family: 'Kaiti', 'STKaiti', '楷体', serif;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.mw-history-original {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+.mw-history-original-label {
+    color: var(--text-tertiary);
+    opacity: 0.7;
+}
+.mw-history-original-text {
+    color: var(--text-secondary);
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* ===== 设置模态框 ===== */
+#mw-settings-modal .modal-content {
+    max-width: 360px;
+    width: 88%;
+}
+
+#mw-settings-modal .modal-title {
+    font-size: 17px;
+}
+
+.mw-settings-section {
+    padding: 20px 24px;
+}
+
+.mw-settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.mw-settings-item:last-child {
+    margin-bottom: 0;
+}
+
+.mw-settings-label {
+    font-size: 14px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mw-settings-label i {
+    color: var(--accent-color);
+    font-size: 14px;
+}
+
+.mw-settings-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mw-settings-input-wrap input {
+    width: 60px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    background: var(--secondary-bg);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.mw-settings-input-wrap input:focus {
+    border-color: var(--accent-color);
+}
+
+.mw-settings-hint {
+    font-size: 12px;
+    color: var(--text-tertiary, #aaa);
+    margin-top: -8px;
+    margin-bottom: 16px;
+    padding-left: 26px;
+}
+
+/* ===== 入口角标 ===== */
+#message-wall-function {
+    position: relative;
+}
+
+.mw-entry-badge {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    min-width: 16px;
+    height: 16px;
+    background: #ff4d4f;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+/* 主页入口角标 */
+.app-item[data-app="message-wall"] .app-badge {
+    position: absolute;
+    top: 2px;
+    right: 18px;
+}
+
+/* ============================================
+   深色便签（拼字卡 + 已修改）统一样式
+   深灰偏蓝背景 + 鎏金色文字
+   ============================================ */
+
+/* 深色便签卡片背景 */
+.mw-sticky-note.source-wordcard .mw-sticky-note-paper,
+.mw-sticky-note.is-edited .mw-sticky-note-paper {
+    background: linear-gradient(145deg, #3a4558 0%, #323d4f 50%, #2a3342 100%) !important;
+    border-color: rgba(90, 105, 130, 0.5) !important;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.45),
+        0 1px 3px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 0 0 1px rgba(201, 168, 108, 0.2),
+        0 0 12px rgba(201, 168, 108, 0.1) !important;
+}
+
+/* 深色便签顶部装饰条 */
+.mw-sticky-note.source-wordcard .mw-sticky-note-paper::before,
+.mw-sticky-note.is-edited .mw-sticky-note-paper::before {
+    background: linear-gradient(90deg, 
+        #b8956a 0%, 
+        #d4bc8a 25%, 
+        #e8d5a3 50%, 
+        #d4bc8a 75%, 
+        #b8956a 100%) !important;
+    height: 5px !important;
+}
+
+/* 深色便签内容文字 - 鎏金色 */
+.mw-sticky-note.source-wordcard .mw-sticky-content,
+.mw-sticky-note.is-edited .mw-sticky-content {
+    color: #e8d5a3 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+}
+
+/* 深色便签时间 */
+.mw-sticky-note.source-wordcard .mw-sticky-time,
+.mw-sticky-note.is-edited .mw-sticky-time {
+    color: #a89880 !important;
+}
+
+/* 深色便签拼字卡数量标记 */
+.mw-sticky-note.source-wordcard .mw-card-count,
+.mw-sticky-note.is-edited .mw-card-count {
+    color: #d4bc8a !important;
+}
+
+/* 深色便签来源标签 */
+.mw-sticky-note.source-wordcard .mw-card-source,
+.mw-sticky-note.is-edited .mw-card-source {
+    color: #d4bc8a !important;
+    background: rgba(201, 168, 108, 0.15) !important;
+}
+
+/* 深色便签已修改标签 */
+.mw-sticky-note.source-wordcard .mw-sticky-edited,
+.mw-sticky-note.is-edited .mw-sticky-edited {
+    color: #d4bc8a !important;
+    background: rgba(201, 168, 108, 0.15) !important;
+}
+
+/* 深色便签删除按钮 */
+.mw-sticky-note.source-wordcard .mw-sticky-del-btn,
+.mw-sticky-note.is-edited .mw-sticky-del-btn {
+    background: rgba(201, 168, 108, 0.2) !important;
+    color: #d4bc8a !important;
+}
+
+.mw-sticky-note.source-wordcard .mw-sticky-del-btn:hover,
+.mw-sticky-note.is-edited .mw-sticky-del-btn:hover {
+    background: rgba(200, 80, 80, 0.25) !important;
+    color: #ff6b6b !important;
+}

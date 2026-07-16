@@ -1,0 +1,30 @@
+/* ========================================
+ * 邀请功能样式
+ * ======================================== */
+
+#invitation-modal .modal-content {
+    max-width: 420px;
+    width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#invitation-modal .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#invitation-modal .modal-title i {
+    color: #6b8fff;
+}
+
+#invitation-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 4px;
+}
