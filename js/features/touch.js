@@ -1048,12 +1048,23 @@
     let longPressSide = null;
 
     function startLongPress(e, partId, side) {
+        // 如果点击的是删除/编辑按钮，不触发长按逻辑
+        const target = e.target;
+        if (target.closest('.touch-part-delete') || target.closest('.touch-part-edit')) {
+            return;
+        }
+
         isLongPressed = false;
         longPressPartId = partId;
         longPressSide = side;
 
-        // 先清除所有按钮的删除状态
-        clearAllDeleteState();
+        // 先清除所有按钮的删除状态（除了当前这个，如果它已经显示了）
+        const currentBtn = document.querySelector(`.touch-part-btn[data-id="${partId}"][data-side="${side}"]`);
+        const isCurrentShowing = currentBtn && currentBtn.classList.contains('show-delete');
+
+        if (!isCurrentShowing) {
+            clearAllDeleteState();
+        }
 
         longPressTimer = setTimeout(() => {
             isLongPressed = true;
