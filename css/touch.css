@@ -705,52 +705,98 @@
     font-size: 14px;
 }
 
-/* 长按删除按钮（右上角） */
-.touch-part-delete {
+/* 编辑模式 - 勾选框 */
+.touch-part-check {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 22px;
-    height: 22px;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: var(--primary-bg);
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.touch-part-btn.edit-mode .touch-part-check {
+    display: flex;
+}
+
+.touch-part-btn.selected .touch-part-check {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.touch-part-btn.edit-mode {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.touch-part-btn.edit-mode.selected {
+    transform: scale(1);
+    opacity: 1;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3);
+}
+
+/* 编辑模式底部栏 */
+.touch-edit-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--secondary-bg);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border: 1px solid var(--border-color);
+}
+
+.touch-edit-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-family, -apple-system, sans-serif);
+}
+
+.touch-edit-btn:active {
+    transform: scale(0.96);
+}
+
+.touch-edit-select-all {
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.touch-edit-delete {
     background: #ff4d4d;
     color: #fff;
-    border: 2px solid var(--primary-bg);
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    z-index: 10;
-    padding: 0;
-    line-height: 1;
+    min-width: 80px;
 }
 
-.touch-part-btn.show-delete .touch-part-delete {
-    display: flex;
+.touch-edit-cancel {
+    background: var(--primary-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
 
-/* 长按修改按钮（左上角） */
-.touch-part-edit {
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: #4d8fff;
-    color: #fff;
-    border: 2px solid var(--primary-bg);
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    z-index: 10;
-    padding: 0;
-    line-height: 1;
-}
-
-.touch-part-btn.show-delete .touch-part-edit {
-    display: flex;
+.touch-edit-count {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
 }

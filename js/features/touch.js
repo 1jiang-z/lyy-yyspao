@@ -566,8 +566,7 @@
                     ${touchData.hisParts.map(part => `
                         <button class="touch-part-btn ${part.heWants ? 'he-wants' : ''}" data-id="${part.id}" data-side="him" onmousedown="window.TouchApp.startLongPress(event, '${part.id}', 'him')" onmouseup="window.TouchApp.endLongPress(event, '${part.id}', 'him')" onmouseleave="window.TouchApp.cancelLongPress()" ontouchstart="window.TouchApp.startLongPress(event, '${part.id}', 'him')" ontouchend="window.TouchApp.endLongPress(event, '${part.id}', 'him')" ontouchcancel="window.TouchApp.cancelLongPress()">
                             ${part.heWants ? '<span class="he-wants-badge"><i class="fas fa-heart"></i> 他想要</span>' : ''}
-                            <span class="touch-part-edit" onclick="event.stopPropagation(); window.TouchApp.editPart('${part.id}', 'him')"><i class="fas fa-pen"></i></span>
-                            <span class="touch-part-delete" onclick="event.stopPropagation(); window.TouchApp.deletePart('${part.id}', 'him')"><i class="fas fa-times"></i></span>
+                            <div class="touch-part-check"><i class="fas fa-check"></i></div>
                             <div class="touch-part-icon">
                                 <i class="fas ${part.icon}"></i>
                             </div>
@@ -584,8 +583,8 @@
                     <button class="touch-add-btn touch-shuffle-btn" onclick="window.TouchApp.shuffleHim()">
                         <i class="fas fa-shuffle"></i> 换一批
                     </button>
-                    <button class="touch-add-btn touch-manage-btn" onclick="window.TouchApp.showManage('him')">
-                        <i class="fas fa-cog"></i> 字卡库
+                    <button class="touch-add-btn touch-manage-btn" onclick="window.TouchApp.enterEditMode('him')">
+                        <i class="fas fa-edit"></i> 编辑
                     </button>
                 </div>
             </div>
@@ -607,8 +606,7 @@
                 <div class="touch-parts-grid">
                     ${touchData.herParts.map(part => `
                         <button class="touch-part-btn touch-part-her" data-id="${part.id}" data-side="her" onmousedown="window.TouchApp.startLongPress(event, '${part.id}', 'her')" onmouseup="window.TouchApp.endLongPress(event, '${part.id}', 'her')" onmouseleave="window.TouchApp.cancelLongPress()" ontouchstart="window.TouchApp.startLongPress(event, '${part.id}', 'her')" ontouchend="window.TouchApp.endLongPress(event, '${part.id}', 'her')" ontouchcancel="window.TouchApp.cancelLongPress()">
-                            <span class="touch-part-edit" onclick="event.stopPropagation(); window.TouchApp.editPart('${part.id}', 'her')"><i class="fas fa-pen"></i></span>
-                            <span class="touch-part-delete" onclick="event.stopPropagation(); window.TouchApp.deletePart('${part.id}', 'her')"><i class="fas fa-times"></i></span>
+                            <div class="touch-part-check"><i class="fas fa-check"></i></div>
                             <div class="touch-part-icon">
                                 <i class="fas ${part.icon}"></i>
                             </div>
@@ -622,8 +620,8 @@
                     <button class="touch-add-btn touch-shuffle-btn" onclick="window.TouchApp.shuffleHer()">
                         <i class="fas fa-shuffle"></i> 等他换方式
                     </button>
-                    <button class="touch-add-btn touch-manage-btn" onclick="window.TouchApp.showManage('her')">
-                        <i class="fas fa-cog"></i> 他的字卡库
+                    <button class="touch-add-btn touch-manage-btn" onclick="window.TouchApp.enterEditMode('her')">
+                        <i class="fas fa-edit"></i> 编辑
                     </button>
                 </div>
 
@@ -674,6 +672,16 @@
                         <i class="fas fa-plus"></i> 添加
                     </button>
                 </div>
+            </div>
+
+            <!-- 编辑模式底部栏 -->
+            <div class="touch-edit-bar" id="touch-edit-bar" style="display:none;">
+                <button class="touch-edit-btn touch-edit-select-all" onclick="window.TouchApp.selectAllParts()">全选</button>
+                <span class="touch-edit-count">已选 0 / 0</span>
+                <button class="touch-edit-btn touch-edit-delete" onclick="window.TouchApp.batchDelete()">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+                <button class="touch-edit-btn touch-edit-cancel" onclick="window.TouchApp.exitEditMode()">取消</button>
             </div>
         `;
 
@@ -729,6 +737,10 @@
     // ===== 切换标签 =====
     function switchTab(tab) {
         currentTab = tab;
+        // 切换标签时退出编辑模式
+        if (isEditMode) {
+            exitEditMode();
+        }
         render();
     }
 
@@ -1041,38 +1053,118 @@
     }
 
     // ===== 暴露到全局 =====
-    // ===== 长按删除/修改功能 =====
+    // ===== 编辑模式 & 批量删除 =====
     let longPressTimer = null;
     let isLongPressed = false;
     let longPressPartId = null;
     let longPressSide = null;
+    let isEditMode = false;
+    let editModeSide = null;
+    let selectedParts = [];
+
+    function toggleSelectPart(partId) {
+        const idx = selectedParts.indexOf(partId);
+        if (idx > -1) {
+            selectedParts.splice(idx, 1);
+        } else {
+            selectedParts.push(partId);
+        }
+        updateEditModeUI();
+    }
+
+    function selectAllParts() {
+        const parts = editModeSide === 'him' ? touchData.hisParts : touchData.herParts;
+        if (selectedParts.length === parts.length) {
+            selectedParts = [];
+        } else {
+            selectedParts = parts.map(p => p.id);
+        }
+        updateEditModeUI();
+    }
+
+    function batchDelete() {
+        if (selectedParts.length === 0) return;
+        if (!confirm(`确定要删除选中的 ${selectedParts.length} 个吗？`)) return;
+
+        if (editModeSide === 'him') {
+            touchData.hisParts = touchData.hisParts.filter(p => !selectedParts.includes(p.id));
+        } else {
+            touchData.herParts = touchData.herParts.filter(p => !selectedParts.includes(p.id));
+        }
+        saveData();
+        selectedParts = [];
+        exitEditMode();
+        render();
+        if (typeof window.showNotification === 'function') {
+            window.showNotification('已删除', 'success', 1500);
+        }
+    }
+
+    function enterEditMode(side) {
+        isEditMode = true;
+        editModeSide = side;
+        selectedParts = [];
+        updateEditModeUI();
+    }
+
+    function exitEditMode() {
+        isEditMode = false;
+        editModeSide = null;
+        selectedParts = [];
+        // 清除所有按钮的编辑状态
+        document.querySelectorAll('.touch-part-btn').forEach(btn => {
+            btn.classList.remove('edit-mode', 'selected');
+        });
+        // 隐藏编辑底部栏
+        const bar = document.getElementById('touch-edit-bar');
+        if (bar) bar.style.display = 'none';
+    }
+
+    function updateEditModeUI() {
+        // 更新按钮选中状态
+        document.querySelectorAll('.touch-part-btn').forEach(btn => {
+            const id = parseInt(btn.dataset.id);
+            const side = btn.dataset.side;
+            if (isEditMode && side === editModeSide) {
+                btn.classList.add('edit-mode');
+                if (selectedParts.includes(id)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            } else {
+                btn.classList.remove('edit-mode', 'selected');
+            }
+        });
+
+        // 更新底部编辑栏
+        const bar = document.getElementById('touch-edit-bar');
+        if (bar) {
+            if (isEditMode) {
+                bar.style.display = 'flex';
+                const parts = editModeSide === 'him' ? touchData.hisParts : touchData.herParts;
+                const countEl = bar.querySelector('.touch-edit-count');
+                const allBtn = bar.querySelector('.touch-edit-select-all');
+                if (countEl) countEl.textContent = `已选 ${selectedParts.length} / ${parts.length}`;
+                if (allBtn) allBtn.textContent = selectedParts.length === parts.length ? '取消全选' : '全选';
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+    }
 
     function startLongPress(e, partId, side) {
-        // 如果点击的是删除/编辑按钮，不触发长按逻辑
-        const target = e.target;
-        if (target.closest('.touch-part-delete') || target.closest('.touch-part-edit')) {
-            return;
-        }
+        // 编辑模式下不触发长按
+        if (isEditMode) return;
 
         isLongPressed = false;
         longPressPartId = partId;
         longPressSide = side;
 
-        // 先清除所有按钮的删除状态（除了当前这个，如果它已经显示了）
-        const currentBtn = document.querySelector(`.touch-part-btn[data-id="${partId}"][data-side="${side}"]`);
-        const isCurrentShowing = currentBtn && currentBtn.classList.contains('show-delete');
-
-        if (!isCurrentShowing) {
-            clearAllDeleteState();
-        }
-
         longPressTimer = setTimeout(() => {
             isLongPressed = true;
-            // 给当前按钮添加 show-delete 类
-            const btn = document.querySelector(`.touch-part-btn[data-id="${partId}"][data-side="${side}"]`);
-            if (btn) {
-                btn.classList.add('show-delete');
-            }
+            // 长按进入编辑模式
+            enterEditMode(side);
             // 震动反馈
             if (navigator.vibrate) {
                 navigator.vibrate(50);
@@ -1088,6 +1180,11 @@
         // 如果是长按触发的，不执行点击事件
         if (isLongPressed) {
             isLongPressed = false;
+            return;
+        }
+        // 编辑模式下：点击选中/取消
+        if (isEditMode && side === editModeSide) {
+            toggleSelectPart(partId);
             return;
         }
         // 短按：执行原来的点击逻辑
@@ -1243,6 +1340,11 @@
         cancelLongPress: cancelLongPress,
         deletePart: deletePart,
         editPart: editPart,
+        enterEditMode: enterEditMode,
+        exitEditMode: exitEditMode,
+        toggleSelectPart: toggleSelectPart,
+        selectAllParts: selectAllParts,
+        batchDelete: batchDelete,
         getData: function() { return touchData; }
     };
 
