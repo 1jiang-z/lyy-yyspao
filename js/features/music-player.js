@@ -249,9 +249,16 @@ let searchDebounceTimer = null;   // 搜索防抖
     const playBtn = document.getElementById('play-btn');
     const progressArea = document.getElementById('progress-area');
 
-    // 确保悬浮球在最顶层
-    if (player) player.style.zIndex = '2147483647';
-    if (playlist) playlist.style.zIndex = '2147483646';
+    // 确保悬浮球在最顶层 - 移到 body 最后面 + 最高 z-index
+    if (player) {
+        document.body.appendChild(player);
+        player.style.setProperty('z-index', '2147483647', 'important');
+        player.style.position = 'fixed';
+    }
+    if (playlist) {
+        document.body.appendChild(playlist);
+        playlist.style.setProperty('z-index', '2147483646', 'important');
+    }
 
     const addSongModal = document.getElementById('add-song-modal');
     const newSongTitle = document.getElementById('new-song-title');

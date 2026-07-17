@@ -234,6 +234,12 @@
         if (header) header.style.display = 'none';
         if (inputArea) inputArea.style.display = 'none';
 
+        // 主页隐藏音乐悬浮窗
+        const player = document.getElementById('player');
+        if (player) player.style.display = 'none';
+        const playlist = document.getElementById('playlist');
+        if (playlist) playlist.style.display = 'none';
+
         // 隐藏加载动画
         const welcomeAnimation = document.getElementById('welcome-animation');
         if (welcomeAnimation) welcomeAnimation.style.display = 'none';
@@ -259,6 +265,12 @@
         if (chatArea) chatArea.style.display = '';
         if (header) header.style.display = '';
         if (inputArea) inputArea.style.display = '';
+
+        // 聊天页显示音乐悬浮窗（如果功能开启）
+        const player = document.getElementById('player');
+        if (player && player.classList.contains('visible')) {
+            player.style.display = '';
+        }
     };
 
     // ========== 萌宠屋页面切换 ==========

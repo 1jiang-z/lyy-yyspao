@@ -587,6 +587,16 @@
                         <i class="fas fa-edit"></i> 编辑
                     </button>
                 </div>
+
+                <!-- 编辑模式底部栏 -->
+                <div class="touch-edit-bar" id="touch-edit-bar-him" style="display:none;">
+                    <button class="touch-edit-btn touch-edit-select-all" onclick="window.TouchApp.selectAllParts()">全选</button>
+                    <span class="touch-edit-count">已选 0 / 0</span>
+                    <button class="touch-edit-btn touch-edit-delete" onclick="window.TouchApp.batchDelete()">
+                        <i class="fas fa-trash-alt"></i> 删除
+                    </button>
+                    <button class="touch-edit-btn touch-edit-cancel" onclick="window.TouchApp.exitEditMode()">取消</button>
+                </div>
             </div>
 
             <!-- 他戳你面板 -->
@@ -623,6 +633,16 @@
                     <button class="touch-add-btn touch-manage-btn" onclick="window.TouchApp.enterEditMode('her')">
                         <i class="fas fa-edit"></i> 编辑
                     </button>
+                </div>
+
+                <!-- 编辑模式底部栏 -->
+                <div class="touch-edit-bar" id="touch-edit-bar-her" style="display:none;">
+                    <button class="touch-edit-btn touch-edit-select-all" onclick="window.TouchApp.selectAllParts()">全选</button>
+                    <span class="touch-edit-count">已选 0 / 0</span>
+                    <button class="touch-edit-btn touch-edit-delete" onclick="window.TouchApp.batchDelete()">
+                        <i class="fas fa-trash-alt"></i> 删除
+                    </button>
+                    <button class="touch-edit-btn touch-edit-cancel" onclick="window.TouchApp.exitEditMode()">取消</button>
                 </div>
 
                 <div class="touch-her-hint">
@@ -672,16 +692,6 @@
                         <i class="fas fa-plus"></i> 添加
                     </button>
                 </div>
-            </div>
-
-            <!-- 编辑模式底部栏 -->
-            <div class="touch-edit-bar" id="touch-edit-bar" style="display:none;">
-                <button class="touch-edit-btn touch-edit-select-all" onclick="window.TouchApp.selectAllParts()">全选</button>
-                <span class="touch-edit-count">已选 0 / 0</span>
-                <button class="touch-edit-btn touch-edit-delete" onclick="window.TouchApp.batchDelete()">
-                    <i class="fas fa-trash-alt"></i> 删除
-                </button>
-                <button class="touch-edit-btn touch-edit-cancel" onclick="window.TouchApp.exitEditMode()">取消</button>
             </div>
         `;
 
@@ -1128,8 +1138,10 @@
             btn.classList.remove('edit-mode', 'selected');
         });
         // 隐藏编辑底部栏
-        const bar = document.getElementById('touch-edit-bar');
-        if (bar) bar.style.display = 'none';
+        const himBar = document.getElementById('touch-edit-bar-him');
+        const herBar = document.getElementById('touch-edit-bar-her');
+        if (himBar) himBar.style.display = 'none';
+        if (herBar) herBar.style.display = 'none';
     }
 
     function updateEditModeUI() {
@@ -1137,30 +1149,66 @@
         document.querySelectorAll('.touch-part-btn').forEach(btn => {
             const id = parseInt(btn.dataset.id);
             const side = btn.dataset.side;
+            const checkEl = btn.querySelector('.touch-part-check');
             if (isEditMode && side === editModeSide) {
                 btn.classList.add('edit-mode');
+                if (checkEl) {
+                    checkEl.style.display = 'flex';
+                    checkEl.style.position = 'absolute';
+                    checkEl.style.top = '6px';
+                    checkEl.style.right = '6px';
+                    checkEl.style.width = '26px';
+                    checkEl.style.height = '26px';
+                    checkEl.style.borderRadius = '50%';
+                    checkEl.style.border = '2px solid #ccc';
+                    checkEl.style.background = '#fff';
+                    checkEl.style.color = 'transparent';
+                    checkEl.style.alignItems = 'center';
+                    checkEl.style.justifyContent = 'center';
+                    checkEl.style.fontSize = '13px';
+                    checkEl.style.zIndex = '10';
+                    checkEl.style.boxSizing = 'border-box';
+                }
                 if (selectedParts.includes(id)) {
                     btn.classList.add('selected');
+                    if (checkEl) {
+                        checkEl.style.background = '#4caf50';
+                        checkEl.style.borderColor = '#4caf50';
+                        checkEl.style.color = '#fff';
+                    }
                 } else {
                     btn.classList.remove('selected');
+                    if (checkEl) {
+                        checkEl.style.background = '#fff';
+                        checkEl.style.borderColor = '#ccc';
+                        checkEl.style.color = 'transparent';
+                    }
                 }
             } else {
                 btn.classList.remove('edit-mode', 'selected');
+                if (checkEl) {
+                    checkEl.style.display = 'none';
+                }
             }
         });
 
         // 更新底部编辑栏
-        const bar = document.getElementById('touch-edit-bar');
-        if (bar) {
-            if (isEditMode) {
+        const barId = editModeSide === 'him' ? 'touch-edit-bar-him' : 'touch-edit-bar-her';
+        const himBar = document.getElementById('touch-edit-bar-him');
+        const herBar = document.getElementById('touch-edit-bar-her');
+
+        if (himBar) himBar.style.display = 'none';
+        if (herBar) herBar.style.display = 'none';
+
+        if (isEditMode) {
+            const bar = document.getElementById(barId);
+            if (bar) {
                 bar.style.display = 'flex';
                 const parts = editModeSide === 'him' ? touchData.hisParts : touchData.herParts;
                 const countEl = bar.querySelector('.touch-edit-count');
                 const allBtn = bar.querySelector('.touch-edit-select-all');
                 if (countEl) countEl.textContent = `已选 ${selectedParts.length} / ${parts.length}`;
                 if (allBtn) allBtn.textContent = selectedParts.length === parts.length ? '取消全选' : '全选';
-            } else {
-                bar.style.display = 'none';
             }
         }
     }
