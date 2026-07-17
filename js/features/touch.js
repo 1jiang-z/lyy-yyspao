@@ -1048,9 +1048,6 @@
     let longPressSide = null;
 
     function startLongPress(e, partId, side) {
-        if (e.type === 'touchstart') {
-            e.preventDefault();
-        }
         isLongPressed = false;
         longPressPartId = partId;
         longPressSide = side;
