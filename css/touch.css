@@ -710,8 +710,8 @@
     position: absolute;
     top: 6px;
     right: 6px;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     border: 2px solid var(--border-color);
     background: var(--primary-bg);
@@ -729,20 +729,20 @@
 }
 
 .touch-part-btn.selected .touch-part-check {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
+    background: #4caf50;
+    border-color: #4caf50;
 }
 
-.touch-part-btn.edit-mode {
-    transform: scale(0.95);
-    opacity: 0.8;
+.touch-part-btn.selected {
+    animation: touchShake 0.4s ease;
 }
 
-.touch-part-btn.edit-mode.selected {
-    transform: scale(1);
-    opacity: 1;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3);
+@keyframes touchShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-3px) rotate(-2deg); }
+    40% { transform: translateX(3px) rotate(2deg); }
+    60% { transform: translateX(-2px) rotate(-1deg); }
+    80% { transform: translateX(2px) rotate(1deg); }
 }
 
 /* 编辑模式底部栏 */

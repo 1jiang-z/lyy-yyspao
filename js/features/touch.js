@@ -1064,12 +1064,24 @@
 
     function toggleSelectPart(partId) {
         const idx = selectedParts.indexOf(partId);
-        if (idx > -1) {
+        const wasSelected = idx > -1;
+        if (wasSelected) {
             selectedParts.splice(idx, 1);
         } else {
             selectedParts.push(partId);
         }
         updateEditModeUI();
+
+        // 选中时触发抖动动画
+        if (!wasSelected) {
+            const btn = document.querySelector(`.touch-part-btn[data-id="${partId}"][data-side="${editModeSide}"]`);
+            if (btn) {
+                btn.style.animation = 'none';
+                // 强制重排以重启动画
+                void btn.offsetWidth;
+                btn.style.animation = '';
+            }
+        }
     }
 
     function selectAllParts() {
